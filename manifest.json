@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Audio Link Catcher",
+  "version": "1.0.0",
+  "description": "Find audio URLs used by the current page and download them with Unicode-safe filenames.",
+  "permissions": [
+    "downloads",
+    "storage",
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Audio Link Catcher",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}
