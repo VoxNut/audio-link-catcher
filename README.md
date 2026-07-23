@@ -4,7 +4,7 @@ A small Manifest V3 extension for Microsoft Edge and Google Chrome. It detects d
 
 ## What it detects
 
-- `audio`, `video`, and nested `source` elements, including sources inserted after the page loads.
+- `audio` elements and their nested `source` elements, including sources inserted after the page loads.
 - Direct audio links on a page (known audio and playlist extensions).
 - Network responses whose content type identifies them as audio, plus common audio/playlist URL extensions.
 - Direct links even when their filename extension is unusual or missing, as long as the server labels the response with an audio MIME type.

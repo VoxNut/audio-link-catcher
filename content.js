@@ -25,10 +25,10 @@
       found.set(absolute, { url: absolute, name: cleanName(name), source, mime });
     };
 
-    document.querySelectorAll("audio, video").forEach((media) => {
+    document.querySelectorAll("audio").forEach((media) => {
       const label = media.getAttribute("title") || media.getAttribute("aria-label") || document.title;
-      if (media.currentSrc) add(media.currentSrc, label, media.tagName === "AUDIO" ? "Audio element" : "Video element", media.type || "");
-      if (media.src) add(media.src, label, media.tagName === "AUDIO" ? "Audio element" : "Video element", media.type || "");
+      if (media.currentSrc) add(media.currentSrc, label, "Audio element", media.type || "");
+      if (media.src) add(media.src, label, "Audio element", media.type || "");
       media.querySelectorAll("source").forEach((source) => {
         add(source.src, label, `${media.tagName.toLowerCase()} source`, source.type || "");
       });
