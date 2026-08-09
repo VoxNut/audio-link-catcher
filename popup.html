@@ -15,6 +15,10 @@
       <button id="clear" type="button" title="Clear detected links">Clear</button>
     </header>
     <main>
+      <div class="search-row">
+        <label class="sr-only" for="search">Search detected audio</label>
+        <input id="search" type="search" placeholder="Search audio / 音声を検索" autocomplete="off" spellcheck="false">
+      </div>
       <p id="status" role="status"></p>
       <div id="items" aria-live="polite"></div>
       <template id="item-template">
