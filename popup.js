@@ -22,8 +22,11 @@ function render(items) {
     const fragment = template.content.cloneNode(true);
     fragment.querySelector(".filename").textContent = item.name || "audio-download";
     fragment.querySelector(".metadata").textContent = `${item.source || "Page"} · ${item.mime || "Unknown type"}`;
-    fragment.querySelector(".url").textContent = item.url;
+    const url = fragment.querySelector(".url");
+    url.textContent = item.url;
+    url.title = item.url;
     const button = fragment.querySelector(".download");
+    button.setAttribute("aria-label", `Download ${item.name || "audio"}`);
     button.addEventListener("click", async () => {
       button.disabled = true;
       button.textContent = "Starting…";
