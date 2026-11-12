@@ -28,6 +28,7 @@ const AUDIO_EXTENSIONS = new Set([
  * @property {string} mime
  * @property {string} source
  * @property {number} seenAt
+ * @property {number} lastClickedAt
  */
 
 function headerValue(headers, wantedName) {
@@ -113,7 +114,8 @@ function addAudio(tabId, candidate) {
     serverName,
     mime: candidate.mime || previous?.mime || "Unknown audio type",
     source: candidate.source || previous?.source || "Page",
-    seenAt: Date.now()
+    seenAt: previous?.seenAt || Date.now(),
+    lastClickedAt: previous?.lastClickedAt || 0
   };
 
   entries.set(id, { ...previous, ...item });
@@ -189,8 +191,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message?.type === "get-audio" && typeof message.tabId === "number") {
     const items = [...(audioByTab.get(message.tabId)?.values() || [])]
-      .sort((a, b) => b.seenAt - a.seenAt);
+      .sort((a, b) => b.lastClickedAt - a.lastClickedAt || b.seenAt - a.seenAt);
     sendResponse({ items });
+    return;
+  }
+
+  if (message?.type === "touch-audio" && typeof message.tabId === "number" && message.url) {
+    const item = audioByTab.get(message.tabId)?.get(itemId(message.url));
+    if (!item) {
+      sendResponse({ ok: false });
+      return;
+    }
+    item.lastClickedAt = Date.now();
+    sendResponse({ ok: true });
     return;
   }
 

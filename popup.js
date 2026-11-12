@@ -50,6 +50,11 @@ function render() {
     button.addEventListener("click", async () => {
       button.disabled = true;
       button.textContent = "Starting…";
+      const touched = await chrome.runtime.sendMessage({ type: "touch-audio", tabId, url: item.url });
+      if (touched?.ok) {
+        item.lastClickedAt = Date.now();
+        itemsContainer.prepend(button.closest(".item"));
+      }
       const result = await chrome.runtime.sendMessage({ type: "download-audio", url: item.url, name: item.name });
       if (result?.ok) {
         button.textContent = "Started";
