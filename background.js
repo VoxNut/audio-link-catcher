@@ -171,6 +171,15 @@ function safeDownloadName(rawName, url) {
   return name;
 }
 
+function directDownloadUrl(url) {
+  const parsed = new URL(url);
+  const filePage = parsed.pathname.match(/^\/wiki\/File:(.+)$/i);
+  if (/(^|\.)fandom\.com$/i.test(parsed.hostname) && filePage) {
+    return `${parsed.origin}/wiki/Special:Redirect/file/${filePage[1]}`;
+  }
+  return url;
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "audio-found" && sender.tab?.id !== undefined) {
     for (const item of message.items || []) addAudio(sender.tab.id, item);
@@ -198,10 +207,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return;
     }
 
+    const downloadUrl = directDownloadUrl(url);
     chrome.downloads.download(
       {
-        url,
-        filename: safeDownloadName(name, url),
+        url: downloadUrl,
+        filename: safeDownloadName(name, downloadUrl),
         conflictAction: "uniquify",
         saveAs: false
       },
